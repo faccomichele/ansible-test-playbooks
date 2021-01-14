@@ -1,0 +1,11 @@
+- name: Upgrade PIP
+  ansible.windows.win_shell: python -m pip install --upgrade pip
+
+- name: Check currently installed Python modules
+  ansible.windows.win_shell: pip list --format=freeze | ForEach-Object { ($_ -split '==')[0] }
+  register: pymods
+
+- name: Install extra Python modules
+  ansible.windows.win_shell: python -m pip install '{{ item }}'
+  with_items:
+  - '{{ xxxx_your_var_xxxx | difference(pymods.stdout_lines) }}'
